@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: decision-ledger
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: NEBIUS_API_KEY
+        sync: false
+      - key: NEBIUS_BASE_URL
+        value: https://api.tokenfactory.nebius.com/v1/
+      - key: DLEDGER_MODEL_NANO
+        value: nvidia/Nemotron-3.5-Super-VL
+      - key: DLEDGER_MODEL_SUPER
+        value: nvidia/Nemotron-3.5-Super-VL
+      - key: DLEDGER_MODEL_ULTRA
+        value: nvidia/Nemotron-3.5-Super-VL
+      - key: DLEDGER_USE_LLM
+        value: "1"
+      - key: DLEDGER_PERSIST
+        value: "0"
+      - key: DLEDGER_DEMO_USER
+        value: judge
+      - key: DLEDGER_DEMO_PASSWORD
+        sync: false

@@ -1,0 +1,5 @@
+[
+  {"feature": "sso", "status": "in_progress", "eta": "2026-11-15"},
+  {"feature": "audit-logs", "status": "shipped", "shipped_on": "2026-05-20"},
+  {"feature": "webhooks-v2", "status": "shipped", "shipped_on": "2026-09-12"}
+]

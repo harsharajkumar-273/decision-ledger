@@ -1,0 +1,6 @@
+# sample "company repo": the team actually moved to MongoDB in July
+fastapi==0.115.0
+pymongo==4.8.0
+redis==5.0.8
+celery==5.4.0
+sqlalchemy==2.0.32  # leftover, no longer used

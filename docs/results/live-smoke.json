@@ -1,0 +1,81 @@
+{
+  "fixture": "Synthetic sample; not customer data",
+  "extraction": {
+    "candidates": [
+      {
+        "title": "Use PostgreSQL as the primary database.",
+        "fields": {
+          "text": "Use PostgreSQL as the primary database.",
+          "subject": "database",
+          "value": "postgresql",
+          "owner": "Demo reviewer",
+          "reason": "Billing needs relational integrity.",
+          "scope": "",
+          "condition": "",
+          "kind": "tech_choice",
+          "source": "synthetic-live-trial.md:L1"
+        },
+        "warnings": [
+          "Model suggestion: review the choice, attribution and reasoning against the source."
+        ]
+      }
+    ],
+    "mode": "models",
+    "model": "nvidia/Nemotron-3.5-Super-VL",
+    "usage": {
+      "calls": 1,
+      "prompt_tokens": 274,
+      "completion_tokens": 541,
+      "seconds": 2.1556999683380127
+    }
+  },
+  "verdicts": [
+    {
+      "id": "d1",
+      "status": "stale",
+      "rationale": "A later active decision on the same subject, d5 (2026-07-19, jira:PLAT-310), chooses MongoDB as the primary database, superseding d1 (2026-03-04). Repo evidence also shows runtime.json:technologies.database configured as mongodb and does not support d1.",
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Application configuration selects 'mongodb' for 'database', decision selects 'postgresql'",
+          "supports": false,
+          "ref": "runtime.json:technologies.database"
+        }
+      ]
+    },
+    {
+      "id": "d5",
+      "status": "valid",
+      "rationale": "Decision d5 (2026-07-19) is the most recent decision on the database subject and supersedes the earlier, stale competing decision d1 (2026-03-04). Repository evidence confirms the configuration selects mongodb for database (runtime.json:technologies.database). No explicit contrary evidence exists.",
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Application configuration selects 'mongodb' for 'database', decision selects 'mongodb'",
+          "supports": true,
+          "ref": "runtime.json:technologies.database"
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "nano": {
+      "calls": 1,
+      "prompt_tokens": 274,
+      "completion_tokens": 541,
+      "seconds": 2.1556999683380127
+    },
+    "super": {
+      "calls": 0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "seconds": 0.0
+    },
+    "ultra": {
+      "calls": 2,
+      "prompt_tokens": 986,
+      "completion_tokens": 1077,
+      "seconds": 3.897676944732666
+    }
+  },
+  "fallbacks": 0
+}

@@ -1,0 +1,6 @@
+{"id": "dependency", "claims": [{"id": "a", "text": "Use Postgres for billing"}, {"id": "b", "text": "Reporting uses Postgres window functions and depends on the billing database decision a"}], "edges": [{"src": "b", "dst": "a", "type": "depends_on"}]}
+{"id": "explicit-replacement", "claims": [{"id": "a", "text": "Use Postgres as the primary database"}, {"id": "b", "text": "We explicitly replace decision a: use MongoDB as the primary database now"}], "edges": [{"src": "b", "dst": "a", "type": "supersedes"}]}
+{"id": "scoped-coexistence", "claims": [{"id": "a", "text": "Use SQLite in local development", "scope": "development"}, {"id": "b", "text": "Use Postgres in production", "scope": "production"}], "edges": []}
+{"id": "independent", "claims": [{"id": "a", "text": "Use Redis for session cache"}, {"id": "b", "text": "Use Postgres for billing"}], "edges": []}
+{"id": "conflict", "claims": [{"id": "a", "text": "The production primary database must be Postgres only"}, {"id": "b", "text": "The production primary database must be MongoDB only"}], "edges": [{"src": "b", "dst": "a", "type": "contradicts"}]}
+{"id": "conditional", "claims": [{"id": "a", "text": "Keep Postgres in production"}, {"id": "b", "text": "Move to MongoDB only after security approval; approval has not happened", "condition": "security approval"}], "edges": []}

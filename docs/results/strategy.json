@@ -1,0 +1,26 @@
+{
+  "full_sweep": {
+    "verifications": 1486,
+    "stale_precision": 1.0,
+    "stale_recall": 1.0,
+    "stale_f1": 1.0,
+    "dependent_recall": 1.0,
+    "dependent_precision": 0.687
+  },
+  "graph_guided": {
+    "verifications": 851,
+    "stale_precision": 1.0,
+    "stale_recall": 0.796,
+    "stale_f1": 0.886,
+    "dependent_recall": 1.0,
+    "dependent_precision": 0.687
+  },
+  "random_budget": {
+    "verifications": 851,
+    "stale_precision": 1.0,
+    "stale_recall": 0.652,
+    "stale_f1": 0.79,
+    "dependent_recall": 0.72,
+    "dependent_precision": 0.739
+  }
+}

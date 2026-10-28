@@ -1,0 +1,273 @@
+[
+  {
+    "id": "remote",
+    "scenario": "Remote Postgres with no local driver",
+    "files": {
+      ".env.example": "DATABASE_URL=postgresql://managed/db"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01"
+    },
+    "gold": "valid",
+    "rivals": []
+  },
+  {
+    "id": "leftover",
+    "scenario": "Old driver remains after explicit migration",
+    "files": {
+      "requirements.txt": "psycopg2-binary\npymongo",
+      "compose.yml": "services:\n  db:\n    image: mongo:7"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01"
+    },
+    "gold": "contradicted",
+    "rivals": []
+  },
+  {
+    "id": "dual",
+    "scenario": "Both datastores deployed during partial migration",
+    "files": {
+      "compose.yml": "services:\n  old:\n    image: postgres:16\n  new:\n    image: mongo:7"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01"
+    },
+    "gold": "needs_review",
+    "rivals": []
+  },
+  {
+    "id": "missing",
+    "scenario": "No evidence of database selection",
+    "files": {
+      "requirements.txt": "fastapi"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01"
+    },
+    "gold": "needs_review",
+    "rivals": []
+  },
+  {
+    "id": "placeholder",
+    "scenario": "Unresolved runtime URL",
+    "files": {
+      "compose.yml": "services:\n  api:\n    environment:\n      DATABASE_URL: ${DATABASE_URL}"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01"
+    },
+    "gold": "needs_review",
+    "rivals": []
+  },
+  {
+    "id": "envs",
+    "scenario": "Production and staging disagree",
+    "files": {
+      ".env.production": "DATABASE_URL=postgresql://db/app",
+      ".env.staging": "DATABASE_URL=mongodb://db/app"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01"
+    },
+    "gold": "needs_review",
+    "rivals": []
+  },
+  {
+    "id": "scope",
+    "scenario": "Explicit production scope avoids staging confusion",
+    "files": {
+      ".env.production": "DATABASE_URL=postgresql://db/app",
+      ".env.staging": "DATABASE_URL=mongodb://db/app"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01",
+      "scope": "production"
+    },
+    "gold": "valid",
+    "rivals": []
+  },
+  {
+    "id": "condition",
+    "scenario": "Conditional adoption requires prerequisite evidence",
+    "files": {
+      ".env.example": "DATABASE_URL=postgresql://db/app"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01",
+      "condition": "after a security review"
+    },
+    "gold": "needs_review",
+    "rivals": []
+  },
+  {
+    "id": "comment",
+    "scenario": "Comment mentioning Postgres is not a dependency",
+    "files": {
+      "requirements.txt": "# we used psycopg2 before\nfastapi"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01"
+    },
+    "gold": "needs_review",
+    "rivals": []
+  },
+  {
+    "id": "unsupported",
+    "scenario": "Unimplemented policy verifier",
+    "files": {
+      "requirements.txt": "antivirus"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "uploads",
+      "value": "virus-scanning",
+      "date": "2026-01-01",
+      "kind": "policy"
+    },
+    "gold": "needs_review",
+    "rivals": []
+  },
+  {
+    "id": "code",
+    "scenario": "Literal engine URL confirms remote database",
+    "files": {
+      "app.py": "engine = create_engine(\"postgresql://remote/app\")"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01"
+    },
+    "gold": "valid",
+    "rivals": []
+  },
+  {
+    "id": "bad-yaml",
+    "scenario": "Malformed deployment configuration",
+    "files": {
+      "compose.yml": "services: [not valid"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01"
+    },
+    "gold": "needs_review",
+    "rivals": []
+  },
+  {
+    "id": "proposal-not-applied",
+    "scenario": "Newer MongoDB decision is not implemented yet",
+    "files": {
+      "compose.yml": "services:\n  db:\n    image: postgres:16"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01"
+    },
+    "gold": "valid",
+    "rivals": [
+      {
+        "id": "new",
+        "text": "Migrate the database to MongoDB",
+        "subject": "database",
+        "value": "mongodb",
+        "date": "2026-05-01"
+      }
+    ]
+  },
+  {
+    "id": "quoted",
+    "scenario": "SQLAlchemy dialect suffix and quoted URL",
+    "files": {
+      ".env.example": "DATABASE_URL=\"postgresql+psycopg://remote/app\""
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01"
+    },
+    "gold": "valid",
+    "rivals": []
+  },
+  {
+    "id": "override",
+    "scenario": "Actual environment supersedes example",
+    "files": {
+      ".env": "DATABASE_URL=mongodb://db/app",
+      ".env.example": "DATABASE_URL=postgresql://db/app"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01"
+    },
+    "gold": "contradicted",
+    "rivals": []
+  },
+  {
+    "id": "unresolved-with-image",
+    "scenario": "Dynamic app URL may differ from visible local database",
+    "files": {
+      "compose.yml": "services:\n  db:\n    image: postgres:16\n  api:\n    environment:\n      DATABASE_URL: ${DATABASE_URL}"
+    },
+    "claim": {
+      "id": "db",
+      "text": "Use PostgreSQL as the primary database",
+      "subject": "database",
+      "value": "postgresql",
+      "date": "2026-01-01"
+    },
+    "gold": "needs_review",
+    "rivals": []
+  }
+]

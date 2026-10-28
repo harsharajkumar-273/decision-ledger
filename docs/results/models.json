@@ -1,0 +1,193 @@
+{
+  "nano": {
+    "extraction": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "false_positives": [],
+      "missed": [],
+      "error": null,
+      "scope_condition_cases": 3,
+      "scope_condition_recall": 0.667,
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 1711,
+        "completion_tokens": 6977,
+        "seconds": 34.54
+      },
+      "wall_seconds": 34.54
+    },
+    "judge": {
+      "accuracy": 0.833,
+      "n": 12,
+      "misses": [
+        {
+          "id": "j4",
+          "gold": "needs_review",
+          "got": "valid"
+        },
+        {
+          "id": "j10",
+          "gold": "needs_review",
+          "got": "valid"
+        }
+      ],
+      "errors": 0,
+      "usage": {
+        "calls": 12,
+        "prompt_tokens": 4598,
+        "completion_tokens": 8799,
+        "seconds": 37.14
+      },
+      "wall_seconds": 37.16
+    },
+    "linking": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "errors": 0,
+      "n": 6,
+      "misses": [],
+      "usage": {
+        "calls": 6,
+        "prompt_tokens": 1028,
+        "completion_tokens": 3379,
+        "seconds": 13.1
+      },
+      "wall_seconds": 13.1
+    }
+  },
+  "super": {
+    "extraction": {
+      "precision": 0.929,
+      "recall": 0.929,
+      "f1": 0.929,
+      "false_positives": [
+        [
+          "eval:e14",
+          "retired"
+        ]
+      ],
+      "missed": [
+        [
+          "eval:e5",
+          "rabbitmq"
+        ]
+      ],
+      "error": null,
+      "scope_condition_cases": 3,
+      "scope_condition_recall": 0.667,
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 1711,
+        "completion_tokens": 7870,
+        "seconds": 25.56
+      },
+      "wall_seconds": 25.56
+    },
+    "judge": {
+      "accuracy": 0.833,
+      "n": 12,
+      "misses": [
+        {
+          "id": "j4",
+          "gold": "needs_review",
+          "got": "valid"
+        },
+        {
+          "id": "j10",
+          "gold": "needs_review",
+          "got": "valid"
+        }
+      ],
+      "errors": 0,
+      "usage": {
+        "calls": 12,
+        "prompt_tokens": 4598,
+        "completion_tokens": 8660,
+        "seconds": 41.81
+      },
+      "wall_seconds": 41.83
+    },
+    "linking": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "errors": 0,
+      "n": 6,
+      "misses": [],
+      "usage": {
+        "calls": 6,
+        "prompt_tokens": 1028,
+        "completion_tokens": 3328,
+        "seconds": 14.42
+      },
+      "wall_seconds": 14.42
+    }
+  },
+  "ultra": {
+    "extraction": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "false_positives": [],
+      "missed": [],
+      "error": null,
+      "scope_condition_cases": 3,
+      "scope_condition_recall": 0.667,
+      "usage": {
+        "calls": 3,
+        "prompt_tokens": 1711,
+        "completion_tokens": 7300,
+        "seconds": 23.27
+      },
+      "wall_seconds": 23.27
+    },
+    "judge": {
+      "accuracy": 0.917,
+      "n": 12,
+      "misses": [
+        {
+          "id": "j4",
+          "gold": "needs_review",
+          "got": "valid"
+        }
+      ],
+      "errors": 0,
+      "usage": {
+        "calls": 12,
+        "prompt_tokens": 4598,
+        "completion_tokens": 11544,
+        "seconds": 45.01
+      },
+      "wall_seconds": 45.03
+    },
+    "linking": {
+      "precision": 0.75,
+      "recall": 1.0,
+      "f1": 0.857,
+      "errors": 0,
+      "n": 6,
+      "misses": [
+        {
+          "id": "conditional",
+          "missed": [],
+          "invented": [
+            [
+              "b",
+              "a",
+              "supersedes"
+            ]
+          ]
+        }
+      ],
+      "usage": {
+        "calls": 6,
+        "prompt_tokens": 1028,
+        "completion_tokens": 4055,
+        "seconds": 14.01
+      },
+      "wall_seconds": 14.01
+    }
+  }
+}

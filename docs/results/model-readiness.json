@@ -1,0 +1,11 @@
+{
+  "configured": false,
+  "missing": [
+    "NEBIUS_API_KEY",
+    "DLEDGER_MODEL_NANO",
+    "DLEDGER_MODEL_SUPER",
+    "DLEDGER_MODEL_ULTRA"
+  ],
+  "live_verified": false,
+  "probes": []
+}

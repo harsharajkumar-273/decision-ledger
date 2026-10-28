@@ -1,0 +1,12 @@
+__pycache__/
+.pytest_cache/
+.env
+/graph.json
+*.egg-info/
+.venv/
+.local/
+*.history.sqlite3*
+
+.DS_Store
+.env.*
+!.env.example

@@ -1,0 +1,22 @@
+{
+  "configured": true,
+  "missing": [],
+  "live_verified": true,
+  "probes": [
+    {
+      "tier": "nano",
+      "model": "nvidia/Nemotron-3.5-Super-VL",
+      "ok": true
+    },
+    {
+      "tier": "super",
+      "model": "nvidia/Nemotron-3.5-Super-VL",
+      "ok": true
+    },
+    {
+      "tier": "ultra",
+      "model": "nvidia/Nemotron-3.5-Super-VL",
+      "ok": true
+    }
+  ]
+}

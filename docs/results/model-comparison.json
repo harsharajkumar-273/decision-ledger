@@ -1,0 +1,695 @@
+{
+  "dataset": "hand-authored adversarial repository cases",
+  "n": 16,
+  "models_requested": true,
+  "model": "nvidia/Nemotron-3.5-Super-VL",
+  "limitations": "Small synthetic set, not held out. Latest-message baseline is a heuristic, not an LLM RAG system. Live variants use the same model but differ in context, prompts and guardrails; not a pure graph ablation.",
+  "summary": {
+    "evidence_rules": {
+      "accuracy": 1.0,
+      "false_contradictions": 0,
+      "errors": 0
+    },
+    "package_only": {
+      "accuracy": 0.062,
+      "false_contradictions": 13,
+      "errors": 0
+    },
+    "latest_message_heuristic": {
+      "accuracy": 0.25,
+      "false_contradictions": 1,
+      "errors": 0
+    },
+    "nemotron_graph_judge": {
+      "accuracy": 0.875,
+      "false_contradictions": 0,
+      "errors": 1
+    },
+    "nemotron_rag_baseline": {
+      "accuracy": 0.688,
+      "false_contradictions": 1,
+      "errors": 0
+    }
+  },
+  "cases": [
+    {
+      "id": "remote",
+      "scenario": "Remote Postgres with no local driver",
+      "gold": "valid",
+      "predictions": {
+        "evidence_rules": "valid",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "valid",
+        "nemotron_rag_baseline": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL configures postgresql; decision selects postgresql. Credentials and host omitted.",
+          "supports": true,
+          "ref": ".env.example:1"
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 2.085,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 349,
+            "completion_tokens": 361,
+            "seconds": 2.084182024002075
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 1.269,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 346,
+            "completion_tokens": 205,
+            "seconds": 1.2687921524047852
+          }
+        }
+      }
+    },
+    {
+      "id": "leftover",
+      "scenario": "Old driver remains after explicit migration",
+      "gold": "contradicted",
+      "predictions": {
+        "evidence_rules": "contradicted",
+        "package_only": "valid",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "needs_review",
+        "nemotron_rag_baseline": "contradicted"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Deployment service db uses a mongodb image; decision selects postgresql. Runtime availability is not checked.",
+          "supports": false,
+          "ref": "compose.yml:3"
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 3.194,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 350,
+            "completion_tokens": 1134,
+            "seconds": 3.1933400630950928
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 2.208,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 347,
+            "completion_tokens": 251,
+            "seconds": 2.2078659534454346
+          }
+        }
+      }
+    },
+    {
+      "id": "dual",
+      "scenario": "Both datastores deployed during partial migration",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "needs_review",
+        "nemotron_rag_baseline": "contradicted"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Deployment service old uses a postgresql image; decision selects postgresql. Runtime availability is not checked.",
+          "supports": true,
+          "ref": "compose.yml:3"
+        },
+        {
+          "kind": "repo",
+          "detail": "Deployment service new uses a mongodb image; decision selects postgresql. Runtime availability is not checked.",
+          "supports": false,
+          "ref": "compose.yml:5"
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 3.027,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 396,
+            "completion_tokens": 1019,
+            "seconds": 3.026399850845337
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 1.789,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 393,
+            "completion_tokens": 450,
+            "seconds": 1.7890567779541016
+          }
+        }
+      }
+    },
+    {
+      "id": "missing",
+      "scenario": "No evidence of database selection",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "needs_review",
+        "nemotron_rag_baseline": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "'postgresql' not found in 1 manifest/config files; absence does not prove the decision is wrong",
+          "supports": null,
+          "ref": null
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 2.627,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 347,
+            "completion_tokens": 737,
+            "seconds": 2.626328945159912
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 1.529,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 344,
+            "completion_tokens": 304,
+            "seconds": 1.5281059741973877
+          }
+        }
+      }
+    },
+    {
+      "id": "placeholder",
+      "scenario": "Unresolved runtime URL",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "needs_review",
+        "nemotron_rag_baseline": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "api.DATABASE_URL is dynamic or unresolved; deployment settings need review",
+          "supports": null,
+          "ref": "compose.yml:4"
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 1.767,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 345,
+            "completion_tokens": 401,
+            "seconds": 1.7667279243469238
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 1.677,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 342,
+            "completion_tokens": 356,
+            "seconds": 1.677213191986084
+          }
+        }
+      }
+    },
+    {
+      "id": "envs",
+      "scenario": "Production and staging disagree",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "needs_review",
+        "nemotron_rag_baseline": "needs_review"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL configures postgresql; decision selects postgresql. Credentials and host omitted.",
+          "supports": true,
+          "ref": ".env.production:1"
+        },
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL configures mongodb; decision selects postgresql. Credentials and host omitted.",
+          "supports": false,
+          "ref": ".env.staging:1"
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 2.967,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 394,
+            "completion_tokens": 927,
+            "seconds": 2.9664971828460693
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 1.484,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 391,
+            "completion_tokens": 395,
+            "seconds": 1.4840319156646729
+          }
+        }
+      }
+    },
+    {
+      "id": "scope",
+      "scenario": "Explicit production scope avoids staging confusion",
+      "gold": "valid",
+      "predictions": {
+        "evidence_rules": "valid",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "valid",
+        "nemotron_rag_baseline": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL configures postgresql; decision selects postgresql. Credentials and host omitted.",
+          "supports": true,
+          "ref": ".env.production:1"
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 1.351,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 351,
+            "completion_tokens": 351,
+            "seconds": 1.3509979248046875
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 1.345,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 349,
+            "completion_tokens": 199,
+            "seconds": 1.3446509838104248
+          }
+        }
+      }
+    },
+    {
+      "id": "condition",
+      "scenario": "Conditional adoption requires prerequisite evidence",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "error",
+        "nemotron_rag_baseline": "needs_review"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Conditional decision requires confirmation of its prerequisite; the current verifiers cannot establish that it was satisfied",
+          "supports": null,
+          "ref": null
+        }
+      ],
+      "graph_error": "JSONDecodeError",
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 1.993,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 350,
+            "completion_tokens": 513,
+            "seconds": 1.9922759532928467
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 1.739,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 351,
+            "completion_tokens": 362,
+            "seconds": 1.7380471229553223
+          }
+        }
+      }
+    },
+    {
+      "id": "comment",
+      "scenario": "Comment mentioning Postgres is not a dependency",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "valid",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "needs_review",
+        "nemotron_rag_baseline": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "'postgresql' not found in 1 manifest/config files; absence does not prove the decision is wrong",
+          "supports": null,
+          "ref": null
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 1.947,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 347,
+            "completion_tokens": 405,
+            "seconds": 1.9467430114746094
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 2.049,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 344,
+            "completion_tokens": 402,
+            "seconds": 2.048729181289673
+          }
+        }
+      }
+    },
+    {
+      "id": "unsupported",
+      "scenario": "Unimplemented policy verifier",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "needs_review",
+        "nemotron_rag_baseline": "needs_review"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "no verifier for kind 'policy'",
+          "supports": null,
+          "ref": null
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 3.262,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 335,
+            "completion_tokens": 757,
+            "seconds": 3.2599761486053467
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 3.712,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 333,
+            "completion_tokens": 781,
+            "seconds": 3.7109060287475586
+          }
+        }
+      }
+    },
+    {
+      "id": "code",
+      "scenario": "Literal engine URL confirms remote database",
+      "gold": "valid",
+      "predictions": {
+        "evidence_rules": "valid",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "valid",
+        "nemotron_rag_baseline": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "create_engine configures postgresql; decision selects postgresql. Credentials and host omitted.",
+          "supports": true,
+          "ref": "app.py:1"
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 1.714,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 348,
+            "completion_tokens": 367,
+            "seconds": 1.713611125946045
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 1.325,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 345,
+            "completion_tokens": 231,
+            "seconds": 1.324404001235962
+          }
+        }
+      }
+    },
+    {
+      "id": "bad-yaml",
+      "scenario": "Malformed deployment configuration",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "needs_review",
+        "nemotron_rag_baseline": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Deployment YAML could not be parsed",
+          "supports": null,
+          "ref": "compose.yml"
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 1.563,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 337,
+            "completion_tokens": 353,
+            "seconds": 1.5621910095214844
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 1.425,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 334,
+            "completion_tokens": 261,
+            "seconds": 1.4243059158325195
+          }
+        }
+      }
+    },
+    {
+      "id": "proposal-not-applied",
+      "scenario": "Newer MongoDB decision is not implemented yet",
+      "gold": "valid",
+      "predictions": {
+        "evidence_rules": "valid",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "contradicted",
+        "nemotron_graph_judge": "valid",
+        "nemotron_rag_baseline": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Deployment service db uses a postgresql image; decision selects postgresql. Runtime availability is not checked.",
+          "supports": true,
+          "ref": "compose.yml:3"
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 2.885,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 450,
+            "completion_tokens": 895,
+            "seconds": 2.884643077850342
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 2.556,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 347,
+            "completion_tokens": 775,
+            "seconds": 2.5536720752716064
+          }
+        }
+      }
+    },
+    {
+      "id": "quoted",
+      "scenario": "SQLAlchemy dialect suffix and quoted URL",
+      "gold": "valid",
+      "predictions": {
+        "evidence_rules": "valid",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "valid",
+        "nemotron_rag_baseline": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL configures postgresql; decision selects postgresql. Credentials and host omitted.",
+          "supports": true,
+          "ref": ".env.example:1"
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 1.644,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 349,
+            "completion_tokens": 413,
+            "seconds": 1.6424760818481445
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 1.174,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 346,
+            "completion_tokens": 189,
+            "seconds": 1.1736459732055664
+          }
+        }
+      }
+    },
+    {
+      "id": "override",
+      "scenario": "Actual environment supersedes example",
+      "gold": "contradicted",
+      "predictions": {
+        "evidence_rules": "contradicted",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "contradicted",
+        "nemotron_rag_baseline": "contradicted"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL configures mongodb; decision selects postgresql. Credentials and host omitted.",
+          "supports": false,
+          "ref": ".env:1"
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 1.466,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 347,
+            "completion_tokens": 400,
+            "seconds": 1.464944839477539
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 1.513,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 344,
+            "completion_tokens": 268,
+            "seconds": 1.5123770236968994
+          }
+        }
+      }
+    },
+    {
+      "id": "unresolved-with-image",
+      "scenario": "Dynamic app URL may differ from visible local database",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid",
+        "nemotron_graph_judge": "needs_review",
+        "nemotron_rag_baseline": "needs_review"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Deployment service db uses a postgresql image; decision selects postgresql. Runtime availability is not checked.",
+          "supports": null,
+          "ref": "compose.yml:3"
+        },
+        {
+          "kind": "repo",
+          "detail": "api.DATABASE_URL is dynamic or unresolved; deployment settings need review",
+          "supports": null,
+          "ref": "compose.yml:6"
+        }
+      ],
+      "measurements": {
+        "nemotron_graph_judge": {
+          "wall_seconds": 3.033,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 391,
+            "completion_tokens": 865,
+            "seconds": 3.031341075897217
+          }
+        },
+        "nemotron_rag_baseline": {
+          "wall_seconds": 2.279,
+          "usage": {
+            "calls": 1,
+            "prompt_tokens": 388,
+            "completion_tokens": 512,
+            "seconds": 2.2776572704315186
+          }
+        }
+      }
+    }
+  ]
+}

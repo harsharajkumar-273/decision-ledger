@@ -1,0 +1,331 @@
+{
+  "dataset": "hand-authored adversarial repository cases",
+  "n": 16,
+  "models_requested": false,
+  "limitations": "Small synthetic set, not held out. Latest-message baseline is a heuristic, not an LLM RAG system.",
+  "summary": {
+    "evidence_rules": {
+      "accuracy": 1.0,
+      "false_contradictions": 0,
+      "errors": 0
+    },
+    "package_only": {
+      "accuracy": 0.062,
+      "false_contradictions": 13,
+      "errors": 0
+    },
+    "latest_message_heuristic": {
+      "accuracy": 0.25,
+      "false_contradictions": 1,
+      "errors": 0
+    }
+  },
+  "cases": [
+    {
+      "id": "remote",
+      "scenario": "Remote Postgres with no local driver",
+      "gold": "valid",
+      "predictions": {
+        "evidence_rules": "valid",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL configures postgresql; decision selects postgresql. Credentials and host omitted.",
+          "supports": true,
+          "ref": ".env.example:1"
+        }
+      ]
+    },
+    {
+      "id": "leftover",
+      "scenario": "Old driver remains after explicit migration",
+      "gold": "contradicted",
+      "predictions": {
+        "evidence_rules": "contradicted",
+        "package_only": "valid",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Deployment service db uses a mongodb image; decision selects postgresql. Runtime availability is not checked.",
+          "supports": false,
+          "ref": "compose.yml:3"
+        }
+      ]
+    },
+    {
+      "id": "dual",
+      "scenario": "Both datastores deployed during partial migration",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Deployment service old uses a postgresql image; decision selects postgresql. Runtime availability is not checked.",
+          "supports": true,
+          "ref": "compose.yml:3"
+        },
+        {
+          "kind": "repo",
+          "detail": "Deployment service new uses a mongodb image; decision selects postgresql. Runtime availability is not checked.",
+          "supports": false,
+          "ref": "compose.yml:5"
+        }
+      ]
+    },
+    {
+      "id": "missing",
+      "scenario": "No evidence of database selection",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "'postgresql' not found in 1 manifest/config files; absence does not prove the decision is wrong",
+          "supports": null,
+          "ref": null
+        }
+      ]
+    },
+    {
+      "id": "placeholder",
+      "scenario": "Unresolved runtime URL",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "api.DATABASE_URL is dynamic or unresolved; deployment settings need review",
+          "supports": null,
+          "ref": "compose.yml:4"
+        }
+      ]
+    },
+    {
+      "id": "envs",
+      "scenario": "Production and staging disagree",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL configures postgresql; decision selects postgresql. Credentials and host omitted.",
+          "supports": true,
+          "ref": ".env.production:1"
+        },
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL configures mongodb; decision selects postgresql. Credentials and host omitted.",
+          "supports": false,
+          "ref": ".env.staging:1"
+        }
+      ]
+    },
+    {
+      "id": "scope",
+      "scenario": "Explicit production scope avoids staging confusion",
+      "gold": "valid",
+      "predictions": {
+        "evidence_rules": "valid",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL configures postgresql; decision selects postgresql. Credentials and host omitted.",
+          "supports": true,
+          "ref": ".env.production:1"
+        }
+      ]
+    },
+    {
+      "id": "condition",
+      "scenario": "Conditional adoption requires prerequisite evidence",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Conditional decision requires confirmation of its prerequisite; the current verifiers cannot establish that it was satisfied",
+          "supports": null,
+          "ref": null
+        }
+      ]
+    },
+    {
+      "id": "comment",
+      "scenario": "Comment mentioning Postgres is not a dependency",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "valid",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "'postgresql' not found in 1 manifest/config files; absence does not prove the decision is wrong",
+          "supports": null,
+          "ref": null
+        }
+      ]
+    },
+    {
+      "id": "unsupported",
+      "scenario": "Unimplemented policy verifier",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "no verifier for kind 'policy'",
+          "supports": null,
+          "ref": null
+        }
+      ]
+    },
+    {
+      "id": "code",
+      "scenario": "Literal engine URL confirms remote database",
+      "gold": "valid",
+      "predictions": {
+        "evidence_rules": "valid",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "create_engine configures postgresql; decision selects postgresql. Credentials and host omitted.",
+          "supports": true,
+          "ref": "app.py:1"
+        }
+      ]
+    },
+    {
+      "id": "bad-yaml",
+      "scenario": "Malformed deployment configuration",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Deployment YAML could not be parsed",
+          "supports": null,
+          "ref": "compose.yml"
+        }
+      ]
+    },
+    {
+      "id": "proposal-not-applied",
+      "scenario": "Newer MongoDB decision is not implemented yet",
+      "gold": "valid",
+      "predictions": {
+        "evidence_rules": "valid",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "contradicted"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Deployment service db uses a postgresql image; decision selects postgresql. Runtime availability is not checked.",
+          "supports": true,
+          "ref": "compose.yml:3"
+        }
+      ]
+    },
+    {
+      "id": "quoted",
+      "scenario": "SQLAlchemy dialect suffix and quoted URL",
+      "gold": "valid",
+      "predictions": {
+        "evidence_rules": "valid",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL configures postgresql; decision selects postgresql. Credentials and host omitted.",
+          "supports": true,
+          "ref": ".env.example:1"
+        }
+      ]
+    },
+    {
+      "id": "override",
+      "scenario": "Actual environment supersedes example",
+      "gold": "contradicted",
+      "predictions": {
+        "evidence_rules": "contradicted",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL configures mongodb; decision selects postgresql. Credentials and host omitted.",
+          "supports": false,
+          "ref": ".env:1"
+        }
+      ]
+    },
+    {
+      "id": "unresolved-with-image",
+      "scenario": "Dynamic app URL may differ from visible local database",
+      "gold": "needs_review",
+      "predictions": {
+        "evidence_rules": "needs_review",
+        "package_only": "contradicted",
+        "latest_message_heuristic": "valid"
+      },
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "Deployment service db uses a postgresql image; decision selects postgresql. Runtime availability is not checked.",
+          "supports": null,
+          "ref": "compose.yml:3"
+        },
+        {
+          "kind": "repo",
+          "detail": "api.DATABASE_URL is dynamic or unresolved; deployment settings need review",
+          "supports": null,
+          "ref": "compose.yml:6"
+        }
+      ]
+    }
+  ]
+}

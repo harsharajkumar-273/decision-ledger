@@ -1,0 +1,7 @@
+{
+  "technologies": {
+    "database": "mongodb",
+    "cache": "redis",
+    "queue": "celery"
+  }
+}

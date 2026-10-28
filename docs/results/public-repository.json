@@ -1,0 +1,59 @@
+{
+  "repository": "https://github.com/fastapi/full-stack-fastapi-template",
+  "commit": "7257e606cb94eada1dca40173e2b7f99dd549bc6",
+  "trial_at": "2026-10-12T04:40:45.706759+00:00",
+  "method": "read-only static configuration inspection",
+  "limitations": "No maintainer interviews or production access. Negative control is synthetic.",
+  "results": [
+    {
+      "claim_type": "README technology declaration",
+      "value": "postgresql",
+      "verdict": "needs_review",
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL is dynamic or unresolved; deployment settings need review",
+          "supports": null,
+          "ref": ".env:18"
+        },
+        {
+          "kind": "repo",
+          "detail": "Deployment service db uses a postgresql image; decision selects postgresql. Runtime availability is not checked.",
+          "supports": null,
+          "ref": "compose.yml:21"
+        },
+        {
+          "kind": "repo",
+          "detail": "backend.DATABASE_URL is dynamic or unresolved; deployment settings need review",
+          "supports": null,
+          "ref": "compose.yml:64"
+        }
+      ]
+    },
+    {
+      "claim_type": "synthetic negative control; not a project decision",
+      "value": "mongodb",
+      "verdict": "needs_review",
+      "evidence": [
+        {
+          "kind": "repo",
+          "detail": "DATABASE_URL is dynamic or unresolved; deployment settings need review",
+          "supports": null,
+          "ref": ".env:18"
+        },
+        {
+          "kind": "repo",
+          "detail": "Deployment service db uses a postgresql image; decision selects mongodb. Runtime availability is not checked.",
+          "supports": null,
+          "ref": "compose.yml:21"
+        },
+        {
+          "kind": "repo",
+          "detail": "backend.DATABASE_URL is dynamic or unresolved; deployment settings need review",
+          "supports": null,
+          "ref": "compose.yml:64"
+        }
+      ]
+    }
+  ]
+}

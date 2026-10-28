@@ -1,0 +1,6 @@
+{"id": "m1", "author": "maya", "date": "2026-03-04", "source": "slack:#eng/1709", "text": "Decision: we're going with PostgreSQL as our primary DB. Billing needs strong relational integrity."}
+{"id": "m2", "author": "maya", "date": "2026-03-06", "source": "github:pr/41", "text": "Using SQLAlchemy as the ORM since we're on Postgres."}
+{"id": "m3", "author": "sam", "date": "2026-03-11", "source": "slack:#eng/1733", "text": "Let's use Redis for session cache. Latency matters."}
+{"id": "m4", "author": "li", "date": "2026-04-02", "source": "jira:DATA-88", "text": "Cohort reports rely on Postgres window functions, so this stays on the Postgres cluster."}
+{"id": "m5", "author": "raj", "date": "2026-07-19", "source": "jira:PLAT-310", "text": "Approved: migrate the primary database to MongoDB for the event pipeline's flexible schema."}
+{"id": "m6", "author": "sam", "date": "2026-05-14", "source": "slack:#eng/2210", "text": "Anyone up for lunch? Also, we agreed to use Celery for background jobs."}

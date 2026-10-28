@@ -1,0 +1,11 @@
+{
+  "claims": [
+    {"id": "k1", "text": "Told Acme that SSO would ship by 2026-06-30", "subject": "sso", "value": "2026-06-30", "kind": "commitment", "owner": "dana (sales)", "date": "2026-03-12", "source": "email:acme-renewal", "reason": "Acme security review requires SSO", "confidence": 0.95, "status": "active"},
+    {"id": "k2", "text": "Promised Globex audit logs by 2026-05-31", "subject": "audit-logs", "value": "2026-05-31", "kind": "commitment", "owner": "omar (support)", "date": "2026-02-20", "source": "zendesk:48211", "reason": "Compliance audit in June", "confidence": 0.9, "status": "active"},
+    {"id": "k3", "text": "Told Initech that SCIM provisioning lands by 2026-08-15", "subject": "scim", "value": "2026-08-15", "kind": "commitment", "owner": "dana (sales)", "date": "2026-04-08", "source": "slack:#sales/5521", "reason": "Initech onboards 400 users in Q3", "confidence": 0.85, "status": "active"},
+    {"id": "k4", "text": "Promised Hooli webhooks v2 by 2026-09-30", "subject": "webhooks-v2", "value": "2026-09-30", "kind": "commitment", "owner": "li (support)", "date": "2026-06-02", "source": "zendesk:50977", "reason": "Their billing sync needs retries", "confidence": 0.9, "status": "active"}
+  ],
+  "edges": [
+    {"src": "k3", "dst": "k1", "type": "depends_on", "confidence": 0.9}
+  ]
+}

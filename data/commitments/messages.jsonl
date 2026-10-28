@@ -1,0 +1,4 @@
+{"id": "k_m1", "author": "dana (sales)", "date": "2026-03-12", "source": "email:acme-renewal", "text": "Acme won't renew without SSO. I told their CISO we'll have SSO live by end of June."}
+{"id": "k_m2", "author": "omar (support)", "date": "2026-02-20", "source": "zendesk:48211", "text": "Globex asked about audit logs for their June audit. Promised them May 31."}
+{"id": "k_m3", "author": "dana (sales)", "date": "2026-04-08", "source": "slack:#sales/5521", "text": "Initech is great, would love to do a webinar sometime. Also I committed SCIM provisioning to them by Aug 15."}
+{"id": "k_m4", "author": "li (support)", "date": "2026-06-02", "source": "zendesk:50977", "text": "Hooli needs webhook retries. Told them webhooks v2 by Sept 30."}
