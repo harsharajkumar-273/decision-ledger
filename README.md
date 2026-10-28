@@ -26,6 +26,10 @@ The primary demonstration is a synthetic database migration: configuration chang
 
 Why a graph: impact propagation, supersession chains and structural conflict detection keep the expensive model off most of the data.
 
+## Deploy a judge demo
+
+[Deploy on Render](https://render.com/deploy?repo=https://github.com/harsharajkumar-273/decision-ledger) using the included Blueprint. Enter your Nebius key and a separate demo sign-in password privately in Render. See [deployment instructions](deploy/render.md), including free-instance sleep and disposable-state limits. This configuration has not yet been deployed.
+
 ## Quickstart (no API key needed)
 
 ```bash

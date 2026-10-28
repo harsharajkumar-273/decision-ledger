@@ -6,6 +6,8 @@ Reconnect a working GitHub account with `gh auth login --hostname github.com --g
 
 ## Public repository
 
+Published: https://github.com/harsharajkumar-273/decision-ledger. The following commands describe the completed first-publication process; do not recreate the repository.
+
 After signing in, run these commands from the project folder. Choose the intended account before creating the repository. The command creates a public repository, so review what will be included first.
 
 ```sh

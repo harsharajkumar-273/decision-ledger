@@ -2,6 +2,12 @@
 
 **Track:** Best Apps and Agents
 
+**Public code:** https://github.com/harsharajkumar-273/decision-ledger
+
+**Demo URL:** pending deployment
+
+**Public YouTube URL:** pending recording and upload
+
 **Pitch:** Decision Ledger catches the assumptions your migration forgot to update.
 It checks recorded engineering decisions against repository evidence, traces affected
 work and owners, and keeps the resolution history.
@@ -52,7 +58,7 @@ See `FINISH_AND_SUBMIT.md` for the step-by-step runbook and `scripts/prepare_sub
 - Completed: saved extraction/linking/judging measurements and the live comparison; review RESULTS.md.
 - Complete actual user sessions from `USER_VALIDATION.md`; use only real quotes.
 - Deploy the demo if needed, verify access, and record the final three-minute video.
-- Fill in actual Nebius/NVIDIA service feedback in `FEEDBACK.md`.
+- Completed: recorded technical feedback from actual Nebius/NVIDIA usage in `FEEDBACK.md`; add your personal onboarding observations if applicable.
 - State precisely what existed before the submission window and what was added during it.
 
-Demo URL, video URL, public code URL, user observations are still required. Real model metrics are recorded in RESULTS.md. Nothing in this draft claims a Nebius deployment or a completed user study.
+Demo URL, video URL and user observations are still required; the public code repository is linked above. Real model metrics are recorded in RESULTS.md. Nothing in this draft claims a Nebius deployment or a completed user study.
