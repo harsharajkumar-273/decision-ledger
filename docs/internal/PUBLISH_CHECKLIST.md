@@ -23,7 +23,7 @@ If `decision-ledger` already exists, inspect it before choosing a different repo
 
 ## Demo access
 
-Follow FINISH_AND_SUBMIT.md section 6 for the container and hosting settings. The Docker CLI is installed here, but the Docker engine was not running when checked. Start Docker Desktop before building. A ready-to-deploy Render Blueprint is included; follow deploy/render.md. Hosting account access and final deployment are still needed; no external deployment has been performed.
+Follow FINISH_AND_SUBMIT.md section 6 for the container and hosting settings. The Docker CLI is installed here, but the Docker engine was not running when checked. Start Docker Desktop before building. A ready-to-deploy Render Blueprint is included; follow ../../deploy/render.md. Hosting account access and final deployment are still needed; no external deployment has been performed.
 
 Use synthetic sample data and provide judges access instructions. Localhost is not a public demo. The writable app must be protected by the hosting platform's authenticated access layer. Test from a separate browser and keep the service available for judging.
 

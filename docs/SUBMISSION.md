@@ -50,7 +50,7 @@ The retrieval-only latest-message heuristic and package-only checks are weak
 ablations. The same-model RAG-vs-graph comparison has been run; prompts and guardrails differ, so it is not a pure graph ablation.
 The adversarial set is hand-authored and small, not held out.
 
-See `FINISH_AND_SUBMIT.md` for the step-by-step runbook and `scripts/prepare_submission.py` for reproducible local checks and optional live evaluations.
+See `internal/FINISH_AND_SUBMIT.md` for the step-by-step runbook and `scripts/prepare_submission.py` for reproducible local checks and optional live evaluations.
 
 ## Before submitting
 
