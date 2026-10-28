@@ -65,7 +65,7 @@ Compare three approaches on the same cases and same available model where applic
 
 Measure direct contradictions found, downstream affected assumptions found, false alarms, unsupported claims, latency and tokens. Include unchanged controls, old findings, missing configuration and ambiguous scope. Freeze labels before running the comparison. Retain unsuccessful cases.
 
-The existing small synthetic/adversarial sets are a starting point. The live comparison has not been run. The public repository trial does not prove real customer adoption or runtime correctness.
+The existing small synthetic/adversarial sets are a starting point. The live comparison has now been run; see RESULTS.md for measured scores, failures and the limitation that prompts/context/guardrails differ. The public repository trial does not prove real customer adoption or runtime correctness.
 
 Ask engineers to identify the changed assumption, its affected owner and its supporting evidence using the brief. Compare task completion with their usual search/read workflow. Collect actual observations, not hypothetical testimonials.
 
