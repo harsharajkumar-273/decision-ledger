@@ -6,6 +6,8 @@ Local suite: **96 passing tests**. Live endpoint: `nvidia/Nemotron-3.5-Super-VL`
 
 ### Live extraction, judging and linking
 
+> **The judge set has since grown from 12 to 47 cases** (14 valid, 13 contradicted, 20 needs_review; adds conflicting environments, leftover dependencies, conditional and scoped claims, policy claims, and evidence containing injected instructions). The judge accuracies in the table below were measured on the original 12 cases only and have **not yet been re-measured** on the 47. Rerun `dledger eval-models --task judge --out docs/results/models.json` with Nebius credentials before citing them. On the 47 cases the deterministic rule baseline scores 39/47 (0.830), which is the number a model judge has to beat.
+
 Hand-authored sets: 22 messages for extraction, 12 judging cases, 6 linking scenarios. Scores use the harness definitions; extraction matches source/value pairs, not full semantic correctness.
 
 | Routing role | Extraction precision / recall / F1 | Judge accuracy | Linking precision / recall / F1 |

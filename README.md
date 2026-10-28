@@ -109,7 +109,7 @@ random_budget      851   57%    1.00    0.65     0.79   0.72
 
 Graph-guided selection verifies 57% as many claims as a full sweep and finds more stale decisions than a random subset of the same size. It misses *silent drift*: the code changed and the decision has neither a competing claim nor dependents. The nightly full sweep exists to close that gap. The scenarios are synthetic and the dependents figure is favorable by construction, so read this as evidence for the mechanism, not a real-world accuracy claim.
 
-**2. Per-tier model accuracy** (`dledger eval-models`): hand-labeled seed sets in `data/eval/` (22 messages for extraction, 12 evidence-to-verdict cases for judging, and 6 linking scenarios). It reports precision/recall and verdict accuracy next to token and latency cost for each role. The sets are small by design and meant to be extended; results from real model runs belong in `docs/SUBMISSION.md`.
+**2. Per-tier model accuracy** (`dledger eval-models`): hand-labeled seed sets in `data/eval/` (22 messages for extraction, 47 evidence-to-verdict cases for judging, and 6 linking scenarios). It reports precision/recall and verdict accuracy next to token and latency cost for each role. The sets are small by design and meant to be extended; results from real model runs belong in `docs/SUBMISSION.md`.
 
 ## Components
 
