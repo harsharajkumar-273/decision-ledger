@@ -18,7 +18,7 @@ from urllib.parse import parse_qs
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 
-from . import actions, ask as askmod, llm, watch, workflow, importing, workspace, readiness
+from . import actions, ask as askmod, llm, watch, workflow, importing, workspace, readiness, change_review
 from .graph import DecisionGraph
 from .pipeline import check
 from .schema import Status
@@ -187,6 +187,44 @@ def create_app(graph_path: str | None = None, repo: str | None = None) -> FastAP
             return copy.deepcopy(state['report']) if state['report'] else {
                 'graph': graph_payload(state['g']), 'verdicts': [], 'execution': None, 'checked_at': None, 'drafts': [],
                 'known_verdicts': [], 'review_queue': review_queue(state['g'])}
+
+    @app.get('/api/change-review/options')
+    def change_review_options():
+        if not repo:
+            return {'git_available': False, 'base': 'HEAD', 'target': 'HEAD', 'demo_available': True}
+        try:
+            root = Path(change_review.git(repo, 'rev-parse', '--show-toplevel').decode().strip()).resolve()
+            if root != Path(repo).resolve():
+                raise ValueError('not a repository root')
+            head = change_review.resolve(repo, 'HEAD')
+            try:
+                change_review.resolve(repo, 'HEAD^')
+                base = 'HEAD^'
+            except ValueError:
+                base = 'HEAD'
+            return {'git_available': True, 'base': base, 'target': 'HEAD', 'head': head, 'demo_available': True}
+        except ValueError:
+            return {'git_available': False, 'base': 'HEAD', 'target': 'HEAD', 'demo_available': True}
+
+    @app.post('/api/change-review')
+    async def compare_change(request: Request):
+        try:
+            body = await request.json()
+            if not isinstance(body, dict) or any(key in body and not isinstance(body[key], bool)
+                                                 for key in ('demo', 'use_llm')):
+                raise ValueError('provide a comparison object with boolean demo and use_llm options')
+            if not body.get('demo') and not repo:
+                raise ValueError('no repository is configured; try the guided migration example')
+            def perform():
+                with lock:
+                    if body.get('demo'):
+                        return change_review.demo(body.get('use_llm', False))
+                    return change_review.review(copy.deepcopy(state['g']), repo, body.get('base'),
+                                                body.get('target', 'HEAD'), body.get('use_llm', False),
+                                                exclude=(graph_path, store_path))
+            return await asyncio.to_thread(perform)
+        except (ValueError, TypeError, UnicodeError) as exc:
+            raise HTTPException(400, str(exc))
 
     @app.get('/api/workspace')
     def workspace_status():

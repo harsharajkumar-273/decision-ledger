@@ -6,7 +6,7 @@
 
 Decision Ledger helps engineering leads review migrations and dependency changes against the team's recorded reasoning. It connects a proposed code change to affected decisions, their dependents, the evidence, and the owners who need to respond.
 
-This is the target positioning. The current app verifies a local checkout and reacts to local Git/configuration changes. Comparing an unmerged change with its base is the next product increment, not an existing capability.
+This is the target positioning. The current app verifies a local checkout and reacts to local Git/configuration changes. Local Git base-versus-proposed comparison is now implemented; see CHANGE_REVIEW.md. Automatic GitHub PR integration is not implemented.
 
 ## One audience, one expensive moment
 
@@ -32,7 +32,7 @@ Example narrative using the synthetic migration fixture:
 
 Lead with this brief. Let the graph explain the dependency path when the reviewer asks for detail.
 
-## The signature feature to build next
+## The signature feature — now implemented
 
 **Review this change**: compare a base Git revision with a proposed revision or working tree, then produce a decision-impact brief.
 
@@ -78,7 +78,7 @@ Ask engineers to identify the changed assumption, its affected owner and its sup
 - 2:05–2:35: show actual Nemotron/Nebius execution and one measured comparison result, if available.
 - 2:35–2:55: state the specific audience, limitations and next step.
 
-Use the implemented local workflow if the comparison feature is not finished. Never label a synthetic fixture as a customer incident, or a local Git check as a deployed GitHub integration.
+Use the read-only change-review interface or its packaged migration example. Never label a synthetic fixture as a customer incident, or a local Git check as a deployed GitHub integration.
 
 ## Scope discipline
 

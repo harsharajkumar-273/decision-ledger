@@ -12,7 +12,7 @@ A `render.yaml` Blueprint is included. This is a prepared deployment configurati
 
 Free instances sleep after 15 minutes idle and take about a minute to wake. Their local state is disposable. This Blueprint uses in-memory state (`DLEDGER_PERSIST=0`) and synthetic sample data: a restart restores the fixture, not prior edits. Do not claim durable hosted history for this deployment. The local persistent mode remains available separately. A scale-to-zero demo cannot watch while asleep.
 
-The fixture already represents a migrated repository. Use it to demonstrate checks and resolution in the hosted app. Use the local fresh Git demo for the baseline → migration → watcher video sequence. The hosted fixture is not a live GitHub PR integration.
+The fixture already represents a migrated repository. Use it to demonstrate checks and resolution in the hosted app. Use the local fresh Git demo for the baseline → migration → watcher video sequence. The hosted fixture is not a live GitHub PR integration. **Review this change → Try the migration example** runs a read-only before/after comparison using bundled snapshots; it works without Git or a mounted repository.
 
 Shared sign-in is a small-demo access gate, not multi-user authorization. Do not host private company data with it. Protect your model budget by sharing the demo credentials only with intended testers/judges. `/healthz` verifies the process is running; it does not probe model access.
 

@@ -1,0 +1,6 @@
+services:
+  db:
+    image: mongo:7
+  api:
+    environment:
+      DATABASE_URL: mongodb://db/app

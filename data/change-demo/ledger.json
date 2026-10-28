@@ -1,0 +1,14 @@
+{
+  "claims": [
+    {"id": "d1", "text": "Use PostgreSQL as the primary database", "subject": "database", "value": "postgresql", "kind": "tech_choice", "owner": "maya", "date": "2026-03-04", "source": "slack:#eng/1709", "reason": "Strong relational integrity for billing", "confidence": 0.95, "status": "active"},
+    {"id": "d2", "text": "Use Redis for the session cache", "subject": "cache", "value": "redis", "kind": "tech_choice", "owner": "sam", "date": "2026-03-11", "source": "slack:#eng/1733", "reason": "Low-latency session reads", "confidence": 0.9, "status": "active"},
+    {"id": "d3", "text": "Use SQLAlchemy as the ORM", "subject": "orm", "value": "sqlalchemy", "kind": "tech_choice", "owner": "maya", "date": "2026-03-06", "source": "github:pr/41", "reason": "Works well with Postgres", "confidence": 0.9, "status": "active"},
+    {"id": "d4", "text": "Reporting queries rely on Postgres window functions", "subject": "reporting", "value": "postgresql", "kind": "tech_choice", "owner": "li", "date": "2026-04-02", "source": "jira:DATA-88", "reason": "Cohort reports need window functions", "confidence": 0.85, "status": "active"},
+    {"id": "d5", "text": "Migrate the primary database to MongoDB", "subject": "database", "value": "mongodb", "kind": "tech_choice", "owner": "raj", "date": "2026-07-19", "source": "jira:PLAT-310", "reason": "Flexible schema for the event pipeline", "confidence": 0.9, "status": "active"},
+    {"id": "d6", "text": "Use Celery for background jobs", "subject": "queue", "value": "celery", "kind": "tech_choice", "owner": "sam", "date": "2026-05-14", "source": "slack:#eng/2210", "reason": "Retries and scheduling", "confidence": 0.9, "status": "active"}
+  ],
+  "edges": [
+    {"src": "d3", "dst": "d1", "type": "depends_on", "confidence": 0.9},
+    {"src": "d4", "dst": "d1", "type": "depends_on", "confidence": 0.9}
+  ]
+}

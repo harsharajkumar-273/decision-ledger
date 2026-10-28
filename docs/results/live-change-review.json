@@ -1,0 +1,316 @@
+{
+  "at": "2026-10-28T19:44:36.671176+00:00",
+  "read_only": true,
+  "base": {
+    "label": "Before: PostgreSQL",
+    "files": {
+      "compose.yml": "01f7d6bcb4b3429748390f9b1a94c4285fc8efb6687bf88e2d6c6ffe32b41d4c",
+      "reporting.sql": "071893e5e0c02d50371c7a245716342a523dcab06da9755b7fd2808251b0c95e",
+      "requirements.txt": "4c2e0a7850f43359aa1f2c8a5ad0e424ec53a1de210dc0ec6ad7326c3883c811"
+    }
+  },
+  "target": {
+    "label": "Proposed: MongoDB",
+    "files": {
+      "compose.yml": "118e9fb22250fe34ac8e70516e4224c9546bb25440a680bfbd8e5793cf7b60d2",
+      "reporting.sql": "071893e5e0c02d50371c7a245716342a523dcab06da9755b7fd2808251b0c95e",
+      "requirements.txt": "4c2e0a7850f43359aa1f2c8a5ad0e424ec53a1de210dc0ec6ad7326c3883c811"
+    }
+  },
+  "changes": [
+    {
+      "path": "compose.yml",
+      "change": "modified"
+    }
+  ],
+  "findings": [
+    {
+      "id": "d1",
+      "text": "Use PostgreSQL as the primary database",
+      "owner": "maya",
+      "source": "slack:#eng/1709",
+      "reason": "Strong relational integrity for billing",
+      "category": "new",
+      "before": {
+        "status": "needs_review",
+        "rationale": "Model reported a failure without contrary evidence; human review required.",
+        "evidence": [
+          {
+            "kind": "repo",
+            "detail": "Deployment service db uses a postgresql image; decision selects postgresql. Runtime availability is not checked.",
+            "supports": true,
+            "ref": "compose.yml:3"
+          },
+          {
+            "kind": "repo",
+            "detail": "api.DATABASE_URL configures postgresql; decision selects postgresql. Credentials and host omitted.",
+            "supports": true,
+            "ref": "compose.yml:6"
+          }
+        ]
+      },
+      "after": {
+        "status": "stale",
+        "rationale": "Decision d5 (2026-07-19) is later than d1 (2026-03-04), addresses the same subject (database), and selects MongoDB as the primary database, so it supersedes d1. Repo evidence also shows MongoDB configured in compose.yml and does not support d1 (compose.yml:3, compose.yml:6).",
+        "evidence": [
+          {
+            "kind": "repo",
+            "detail": "Deployment service db uses a mongodb image; decision selects postgresql. Runtime availability is not checked.",
+            "supports": false,
+            "ref": "compose.yml:3"
+          },
+          {
+            "kind": "repo",
+            "detail": "api.DATABASE_URL configures mongodb; decision selects postgresql. Credentials and host omitted.",
+            "supports": false,
+            "ref": "compose.yml:6"
+          }
+        ]
+      },
+      "affected": [
+        {
+          "id": "d3",
+          "text": "Use SQLAlchemy as the ORM",
+          "owner": "maya",
+          "path": [
+            {
+              "id": "d1",
+              "text": "Use PostgreSQL as the primary database"
+            },
+            {
+              "id": "d3",
+              "text": "Use SQLAlchemy as the ORM"
+            }
+          ]
+        },
+        {
+          "id": "d4",
+          "text": "Reporting queries rely on Postgres window functions",
+          "owner": "li",
+          "path": [
+            {
+              "id": "d1",
+              "text": "Use PostgreSQL as the primary database"
+            },
+            {
+              "id": "d4",
+              "text": "Reporting queries rely on Postgres window functions"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "text": "Use Redis for the session cache",
+      "owner": "sam",
+      "source": "slack:#eng/1733",
+      "reason": "Low-latency session reads",
+      "category": "unchanged",
+      "before": {
+        "status": "valid",
+        "rationale": "The decision is supported by repository evidence showing a redis dependency/config token in requirements.txt:4. There are no competing decisions on the same subject, no dependents indicating a change, and no contrary evidence; the 'not runtime proof' caveat does not override the supporting token.",
+        "evidence": [
+          {
+            "kind": "repo",
+            "detail": "'redis' dependency/config token found: redis; installation is not runtime proof",
+            "supports": true,
+            "ref": "requirements.txt:4"
+          }
+        ]
+      },
+      "after": {
+        "status": "valid",
+        "rationale": "Repo evidence (requirements.txt:4) records a redis dependency/config token supporting the Redis session-cache choice; no competing or contradicting decisions on the same subject are present.",
+        "evidence": [
+          {
+            "kind": "repo",
+            "detail": "'redis' dependency/config token found: redis; installation is not runtime proof",
+            "supports": true,
+            "ref": "requirements.txt:4"
+          }
+        ]
+      },
+      "affected": []
+    },
+    {
+      "id": "d3",
+      "text": "Use SQLAlchemy as the ORM",
+      "owner": "maya",
+      "source": "github:pr/41",
+      "reason": "Works well with Postgres",
+      "category": "new",
+      "before": {
+        "status": "valid",
+        "rationale": "The decision to use SQLAlchemy is supported by repository evidence listing sqlalchemy in requirements.txt:3. No competing decisions or dependents contradict it, and there is no explicit contrary evidence.",
+        "evidence": [
+          {
+            "kind": "repo",
+            "detail": "'sqlalchemy' dependency/config token found: sqlalchemy; installation is not runtime proof",
+            "supports": true,
+            "ref": "requirements.txt:3"
+          }
+        ]
+      },
+      "after": {
+        "status": "needs_review",
+        "rationale": "Direct evidence supports this decision, but a prerequisite no longer holds; review the dependent reasoning.",
+        "evidence": [
+          {
+            "kind": "repo",
+            "detail": "'sqlalchemy' dependency/config token found: sqlalchemy; installation is not runtime proof",
+            "supports": true,
+            "ref": "requirements.txt:3"
+          }
+        ]
+      },
+      "affected": []
+    },
+    {
+      "id": "d4",
+      "text": "Reporting queries rely on Postgres window functions",
+      "owner": "li",
+      "source": "jira:DATA-88",
+      "reason": "Cohort reports need window functions",
+      "category": "existing",
+      "before": {
+        "status": "needs_review",
+        "rationale": "Evidence only confirms a PostgreSQL client dependency (psycopg2-binary in requirements.txt:1); it does not prove reporting queries actually use Postgres window functions at runtime. No competing or contradicting decisions exist, but the specific claim is unsubstantiated.",
+        "evidence": [
+          {
+            "kind": "repo",
+            "detail": "'postgresql' dependency/config token found: psycopg2-binary; installation is not runtime proof",
+            "supports": true,
+            "ref": "requirements.txt:1"
+          }
+        ]
+      },
+      "after": {
+        "status": "needs_review",
+        "rationale": "Direct evidence supports this decision, but a prerequisite no longer holds; review the dependent reasoning.",
+        "evidence": [
+          {
+            "kind": "repo",
+            "detail": "'postgresql' dependency/config token found: psycopg2-binary; installation is not runtime proof",
+            "supports": true,
+            "ref": "requirements.txt:1"
+          }
+        ]
+      },
+      "affected": []
+    },
+    {
+      "id": "d5",
+      "text": "Migrate the primary database to MongoDB",
+      "owner": "raj",
+      "source": "jira:PLAT-310",
+      "reason": "Flexible schema for the event pipeline",
+      "category": "resolved",
+      "before": {
+        "status": "needs_review",
+        "rationale": "d5 (2026-07-19) is later and active, so it would normally supersede the older competing decision d1 (postgresql, 2026-03-04, needs_review). However, the repo evidence shows the deployment service still uses a postgresql image and api.DATABASE_URL configures postgresql (compose.yml:3, compose.yml:6), which does not support the mongodb migration and aligns with d1. There is no explicit decision reversing d5, so it is not contradicted, but the evidence is insufficient to confirm the migration decision still holds.",
+        "evidence": [
+          {
+            "kind": "repo",
+            "detail": "Deployment service db uses a postgresql image; decision selects mongodb. Runtime availability is not checked.",
+            "supports": false,
+            "ref": "compose.yml:3"
+          },
+          {
+            "kind": "repo",
+            "detail": "api.DATABASE_URL configures postgresql; decision selects mongodb. Credentials and host omitted.",
+            "supports": false,
+            "ref": "compose.yml:6"
+          }
+        ]
+      },
+      "after": {
+        "status": "valid",
+        "rationale": "Decision d5 (2026-07-19) is later than the competing decision d1 (2026-03-04, marked stale) on the same subject. Repo evidence supports d5: compose.yml uses a mongodb image (compose.yml:3) and api.DATABASE_URL configures mongodb (compose.yml:6). No explicit contrary evidence exists; omitted credentials/host and unchecked runtime availability are missing details, not contradictions.",
+        "evidence": [
+          {
+            "kind": "repo",
+            "detail": "Deployment service db uses a mongodb image; decision selects mongodb. Runtime availability is not checked.",
+            "supports": true,
+            "ref": "compose.yml:3"
+          },
+          {
+            "kind": "repo",
+            "detail": "api.DATABASE_URL configures mongodb; decision selects mongodb. Credentials and host omitted.",
+            "supports": true,
+            "ref": "compose.yml:6"
+          }
+        ]
+      },
+      "affected": []
+    },
+    {
+      "id": "d6",
+      "text": "Use Celery for background jobs",
+      "owner": "sam",
+      "source": "slack:#eng/2210",
+      "reason": "Retries and scheduling",
+      "category": "unchanged",
+      "before": {
+        "status": "valid",
+        "rationale": "Repo evidence in requirements.txt:5 confirms the celery dependency/config token, supporting the queue tech choice; no competing decisions or contrary evidence are present.",
+        "evidence": [
+          {
+            "kind": "repo",
+            "detail": "'celery' dependency/config token found: celery; installation is not runtime proof",
+            "supports": true,
+            "ref": "requirements.txt:5"
+          }
+        ]
+      },
+      "after": {
+        "status": "valid",
+        "rationale": "Supporting evidence found: celery dependency/config token in requirements.txt:5; no competing decisions or contrary evidence on the queue subject.",
+        "evidence": [
+          {
+            "kind": "repo",
+            "detail": "'celery' dependency/config token found: celery; installation is not runtime proof",
+            "supports": true,
+            "ref": "requirements.txt:5"
+          }
+        ]
+      },
+      "affected": []
+    }
+  ],
+  "counts": {
+    "new": 2,
+    "existing": 1,
+    "resolved": 1,
+    "unchanged": 2
+  },
+  "execution": {
+    "mode": "models",
+    "calls": 12,
+    "fallbacks": 0,
+    "usage": {
+      "nano": {
+        "calls": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "seconds": 0.0
+      },
+      "super": {
+        "calls": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "seconds": 0.0
+      },
+      "ultra": {
+        "calls": 12,
+        "prompt_tokens": 5080,
+        "completion_tokens": 13777,
+        "seconds": 42.82400703430176
+      }
+    },
+    "model": "nvidia/Nemotron-3.5-Super-VL"
+  },
+  "limitations": "Compares the same current ledger against both snapshots. Does not reconstruct historical decisions, run application tests, or prove runtime breakage. Working-tree review includes relevant untracked/ignored files; no raw file content is returned.",
+  "demo": true,
+  "classification_note": "Categories computed from saved before/after assessments; uncertainty becoming an explicit failure is new. Model assessments retained unchanged."
+}

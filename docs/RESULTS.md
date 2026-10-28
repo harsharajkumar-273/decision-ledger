@@ -2,7 +2,7 @@
 
 ## Current measured status — October 28, 2026
 
-Local suite: **96 passing tests**. Live endpoint: `nvidia/Nemotron-3.5-Super-VL` through Nebius Token Factory. All three routing roles used that same model, so their differences below are repeat-run variation, not comparisons between model sizes. No user study or public deployment has been completed.
+Local suite: **109 passing tests**. Live endpoint: `nvidia/Nemotron-3.5-Super-VL` through Nebius Token Factory. All three routing roles used that same model, so their differences below are repeat-run variation, not comparisons between model sizes. No user study or public deployment has been completed.
 
 ### Live extraction, judging and linking
 
@@ -40,4 +40,8 @@ Combined evaluations recorded 95 successful API responses, 33441 input tokens an
 
 ## Still outstanding
 
-A judge-accessible deployment, actual developer feedback, a public demonstration video and final Devpost submission. Before-and-after Git comparison remains future work.
+A judge-accessible deployment, actual developer feedback, a public demonstration video and final Devpost submission. Before-and-after Git comparison is now implemented and tested; automatic GitHub PR integration is not implemented.
+
+## Live change-review verification
+
+`results/live-change-review.json` retains a synthetic before/after run using 12 calls to `nvidia/Nemotron-3.5-Super-VL`, with zero judge fallbacks. It yields 2 new, 1 existing, 1 resolved and 2 unchanged decision findings under the documented category rules. Some baseline decisions are uncertain in the model run, so these counts differ from the deterministic example (3 new, 0 existing, 1 resolved, 2 unchanged). This is workflow evidence, not a new accuracy benchmark. Categories were computed from the saved assessments using the final deterministic classifier; model evidence and judgments were not changed.

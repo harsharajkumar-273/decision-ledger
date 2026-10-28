@@ -14,11 +14,14 @@ work and owners, and keeps the resolution history.
 
 **Primary audience:** engineering leads reviewing database migrations and dependency changes.
 
-**Next product increment:** a before-and-after review of an unmerged Git change.
-The current demonstrated workflow checks a local checkout and watches local changes;
-it is not yet a GitHub PR review integration. See `PRODUCT_THESIS.md` for the focused product plan.
+**Change review:** compare local Git revisions or working files against the same ledger,
+with before/after evidence, new/existing/resolved findings, affected owners and read-only exports.
+A packaged migration example works without Git. Automatic GitHub PR integration is not implemented.
+See `CHANGE_REVIEW.md` for behavior, limits and measured live execution.
 
 ## Demonstrated locally
+
+- Read-only before-and-after Git comparison and a guided migration example.
 
 - A Git/configuration change automatically triggers verification.
 - Native deployment files provide redacted, file-referenced database evidence.

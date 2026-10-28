@@ -4,9 +4,9 @@
 
 Built for the Nebius x NVIDIA Global AI Hackathon using **NVIDIA Nemotron through Nebius Token Factory**. The current verified model is `nvidia/Nemotron-3.5-Super-VL`, used for all three configurable routing roles (extraction, linking and judging). Role names Nano/Super/Ultra do not imply three distinct tested models.
 
-The local app records and imports decisions, checks repository evidence, traces dependency impact, and records resolutions. A Git base-versus-proposed-change comparison and GitHub PR review integration are not implemented. See [measured results and limitations](docs/RESULTS.md) and [setup and submission steps](docs/FINISH_AND_SUBMIT.md).
+The local app records and imports decisions, checks repository evidence, traces dependency impact, and records resolutions. Read-only before-and-after Git comparison is implemented, including a bundled migration example. Automatic GitHub PR integration is not implemented. See [measured results and limitations](docs/RESULTS.md) and [setup and submission steps](docs/FINISH_AND_SUBMIT.md).
 
-![Decision workspace: the Postgres decision is contradicted and its dependents are flagged](docs/ui-workflow.jpg)
+![Read-only change review with before-and-after evidence](docs/ui-change-review.jpg)
 
 ## The problem
 
@@ -236,3 +236,7 @@ Follow [the end-to-end runbook](docs/FINISH_AND_SUBMIT.md) for local setup, real
 The workspace now shows evidence coverage and a list of decisions without recorded assessments. **Check unchecked decisions** checks those entries without rechecking previously assessed decisions. After saving an import, **Check imported decisions** checks the newly created entries as a batch. **What needs to change** summarizes failed/retired assumptions, unresolved dependents, owners and evidence. Coverage records whether a decision has been assessed, not whether it is supported.
 
 In **Import ADRs**, opt into **Use Nemotron extraction through Nebius** to preview actual model suggestions. They remain unselected until reviewed. The preview reports its model and token count; unavailable model access fails explicitly without silently using Markdown rules. Configure all routing roles and use the CLI ingestion workflow for model-based dependency linking. Live extraction, linking and judging evaluations are recorded in docs/RESULTS.md; a public hosted deployment and actual user study remain outstanding.
+
+## Review a proposed change
+
+Select **Review this change** and compare local Git commits or branches, or use `WORKTREE` for current working files. The report separates new, existing, resolved and unchanged findings, with before/after evidence, affected owners and dependency paths. **Try the migration example** works without Git using a packaged synthetic fixture. Comparisons are read-only; model calls are optional and disclosed. See [change-review behavior and limits](docs/CHANGE_REVIEW.md).

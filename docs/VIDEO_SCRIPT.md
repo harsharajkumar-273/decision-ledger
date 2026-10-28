@@ -38,7 +38,7 @@ If showing evaluation figures, use only the completed results in RESULTS.md. Do 
 
 ## 2:30–2:50 — Close
 
-“Decision Ledger is for engineers reviewing consequential changes. Our current build verifies local checkouts and tracks dependency impact. Before-and-after review of an unmerged change is future work. The code is open source, and the demo uses a synthetic team fixture.”
+“Decision Ledger is for engineers reviewing consequential changes. Our current build verifies local checkouts and tracks dependency impact. The change-review interface compares local revisions or working files without changing the ledger. GitHub PR integration is future work. The code is open source, and the demo uses a synthetic team fixture.”
 
 End on the app with the project name and verified repository/demo URLs, added after publication.
 
@@ -50,3 +50,7 @@ End on the app with the project name and verified repository/demo URLs, added af
 - Human replacement recorded; dependent reviews remain pending.
 - Video below three minutes; public YouTube visibility; correct link in Devpost.
 - Speak naturally; shorten the script rather than speed-reading.
+
+## Alternative opening for the new change review
+
+Open **Review this change** → **Try the migration example**. Show category counts and before/after database evidence, then the reporting dependency path and owner. Call it a packaged synthetic example. Turn on live Nemotron only when recording actual calls, and use the resulting counts rather than assuming they equal the rules-only run. For a real local Git comparison, use the prepared .local/change-review-demo repository with HEAD^ → HEAD. Close the comparison to return to the unchanged ledger before demonstrating human resolution.
