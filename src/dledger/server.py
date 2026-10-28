@@ -322,12 +322,12 @@ def create_app(graph_path: str | None = None, repo: str | None = None) -> FastAP
                 raise ValueError('provide an import object with a boolean use_llm option')
             if body.get('use_llm'):
                 try:
-                    return await asyncio.to_thread(importing.preview_with_models, body)
+                    return await asyncio.to_thread(importing.preview_documents, body)
                 except ValueError:
                     raise
                 except Exception:
                     raise HTTPException(502, 'model extraction failed; check model access and retry, or select Markdown rules')
-            return {'candidates': importing.preview(body), 'mode': 'markdown_rules'}
+            return importing.preview_documents(body)
         except (ValueError, TypeError) as exc:
             raise HTTPException(400, str(exc))
 

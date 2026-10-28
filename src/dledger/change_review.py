@@ -150,6 +150,7 @@ def compare(graph, before_dir, after_dir, before_snapshot, after_snapshot, use_l
     return {'at': datetime.now(timezone.utc).isoformat(), 'read_only': True,
             'base': before_snapshot, 'target': after_snapshot,
             'changes': watch.changes(before_snapshot, after_snapshot), 'findings': rows,
+            'brief': review_brief(rows, watch.changes(before_snapshot, after_snapshot)),
             'counts': {key: sum(row['category'] == key for row in rows) for key in ('new', 'existing', 'resolved', 'unchanged')},
             'execution': {'mode': 'rules' if not use_llm else 'fallback' if fallbacks else 'models' if calls else 'rules',
                           'calls': calls, 'fallbacks': fallbacks, 'usage': delta,
@@ -186,3 +187,22 @@ def demo(use_llm=False):
     result['base'] = {'label': 'Before: PostgreSQL', 'files': result['base']['files']}
     result['target'] = {'label': 'Proposed: MongoDB', 'files': result['target']['files']}
     return result
+
+
+def review_brief(findings, changes):
+    """A grounded summary; dependency concerns are distinct from direct conflicts."""
+    attention = [f for f in findings if f['category'] in ('new', 'existing')]
+    owners = sorted({f['owner'] for f in attention if f['owner']} |
+                    {d['owner'] for f in attention for d in f['affected'] if d['owner']})
+    direct = [f for f in attention if f['after']['status'] in ('contradicted', 'stale')]
+    uncertain = [f for f in attention if f['after']['status'] == 'needs_review']
+    return {'headline': f"{len(attention)} decisions need review" if attention else 'No decisions need review in this comparison',
+            'changed_files': [c['path'] for c in changes], 'owners': owners,
+            'unassigned': sum(not f['owner'] for f in attention),
+            'direct_conflicts': [f['id'] for f in direct],
+            'review_concerns': [f['id'] for f in uncertain],
+            'items': [{'id': f['id'], 'text': f['text'], 'owner': f['owner'],
+                       'category': f['category'], 'status': f['after']['status'],
+                       'rationale': f['after']['rationale'],
+                       'evidence': f['after']['evidence'][:2],
+                       'affected': [{'id': d['id'], 'text': d['text'], 'owner': d['owner']} for d in f['affected']]} for f in attention]}

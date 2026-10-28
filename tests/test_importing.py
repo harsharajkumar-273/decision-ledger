@@ -68,3 +68,37 @@ def test_import_atomic_duplicate_safe_and_durable(tmp_path, monkeypatch):
     restored = TestClient(create_app(str(path), str(tmp_path)))
     assert restored.get('/api/report').json()['event_id'] == result['event_id']
     assert len(DecisionGraph.load(path).claims()) == 1
+
+
+def test_multiple_adr_files_preserve_sources_and_require_review(tmp_path):
+    path = tmp_path / 'ledger.json'
+    DecisionGraph().save(path)
+    client = TestClient(create_app(str(path), str(tmp_path)))
+    response = client.post('/api/import/preview', json={'documents': [
+        {'source': '0001-cache.md', 'text': ADR},
+        {'source': '0002-storage.md', 'text': '# Storage\n## Decision\nUse MongoDB for documents.'}], 'owner': 'Default reviewer'})
+    assert response.status_code == 200
+    result = response.json()
+    assert result['documents'] == 2
+    assert [r['fields']['source'] for r in result['candidates']] == ['0001-cache.md:L1', '0002-storage.md:L1']
+    assert result['candidates'][0]['fields']['owner'] == 'Maya'
+    assert result['candidates'][1]['fields']['owner'] == 'Default reviewer'
+    assert result['candidates'][1]['warnings']
+    assert client.get('/api/graph').json()['nodes'] == []
+
+
+@pytest.mark.parametrize('documents', [[], [{'text': ADR}], [{'source': 'a', 'text': ADR}] * 21,
+                                      [{'source': 'a', 'text': 'x' * 60000}, {'source': 'b', 'text': 'y' * 60000}],
+                                      [{'source': 'a', 'text': '# A\n' * 11}, {'source': 'b', 'text': '# B\n' * 10}]])
+def test_invalid_document_batch(documents):
+    from dledger.importing import preview_documents
+    with pytest.raises(ValueError):
+        preview_documents({'documents': documents})
+
+
+def test_madr_sections_and_bold_metadata():
+    row = preview({'text': '# Cache\n**Status:** Accepted\n**Decision makers:** Li\n\n## Context and Problem Statement\nLow latency matters.\n\n## Decision Outcome\nUse Redis for sessions.'})[0]
+    assert row['fields']['owner'] == 'Li'
+    assert row['fields']['value'] == 'redis'
+    assert row['fields']['reason'] == 'Low latency matters.'
+    assert row['warnings'] == []

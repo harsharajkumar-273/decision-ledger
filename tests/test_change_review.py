@@ -134,3 +134,19 @@ def test_worktree_excludes_application_state(migration):
     graph.save(ledger)
     result = change_review.review(graph, repo, base, 'WORKTREE', exclude=(ledger,))
     assert [c['path'] for c in result['changes']] == ['compose.yml']
+
+
+def test_brief_is_grounded_and_separates_conflicts_from_review_concerns():
+    result = change_review.demo()
+    brief = result['brief']
+    rows = {f['id']: f for f in result['findings']}
+    assert brief['changed_files'] == ['compose.yml']
+    assert 'd1' in brief['direct_conflicts']
+    assert set(brief['direct_conflicts']).isdisjoint(brief['review_concerns'])
+    assert {'maya', 'li'} <= set(brief['owners'])
+    assert len(brief['items']) == result['counts']['new'] + result['counts']['existing']
+    for item in brief['items']:
+        assert item['evidence'] == rows[item['id']]['after']['evidence'][:2]
+        assert item['rationale'] == rows[item['id']]['after']['rationale']
+    identical = change_review.review_brief([], [])
+    assert identical['items'] == [] and identical['direct_conflicts'] == []

@@ -26,20 +26,20 @@ def preview(body: dict) -> list[dict]:
     for start, end, title in blocks:
         block = text[start:end]
         def metadata(key):
-            match = re.search(r'^\s*(?:[-*]\s*)?(?:\*\*)?' + key + r'(?:\*\*)?\s*:\s*(.+)$', block, re.I | re.M)
+            match = re.search(r'^\s*(?:[-*]\s*)?(?:\*\*)?' + key + r'(?:\*\*)?\s*:\s*(?:\*\*)?\s*(.+)$', block, re.I | re.M)
             return match.group(1).strip() if match else ''
         def section(key):
             match = re.search(r'^##\s+' + key + r'\s*\n(.*?)(?=^##?\s|\Z)', block, re.I | re.M | re.S)
             return match.group(1).strip() if match else ''
-        decision = section('Decision') or metadata('Decision')
+        decision = section('Decision') or section('Decision Outcome') or metadata('Decision')
         # Do not infer a choice from rejected alternatives in Context/Consequences.
         matches = [(subject, value) for subject, values in TECHNOLOGIES.items() for value in values
                    if re.search(r'\b' + re.escape(value) + r'\b', decision, re.I)]
         matches = list(dict.fromkeys((subject, 'postgresql' if value == 'postgres' else value) for subject, value in matches))
         subject, value = matches[0] if len(matches) == 1 else ('', '')
         fields = {'text': decision, 'subject': metadata('Subject') or subject,
-                  'value': metadata('Value') or value, 'owner': metadata('Owner') or owner.strip(),
-                  'reason': section('Context') or metadata('Reason') or section('Rationale'),
+                  'value': metadata('Value') or value, 'owner': metadata('Owner') or metadata('Decision makers') or owner.strip(),
+                  'reason': section('Context') or section('Context and Problem Statement') or metadata('Reason') or section('Rationale'),
                   'scope': metadata('Scope'), 'condition': metadata('Condition'),
                   'kind': 'tech_choice', 'source': f'{source.strip() or "Pasted ADR"}:L{text[:start].count(chr(10)) + 1}'}
         # Keep provenance intact; ask the reviewer to shorten oversized fields.
@@ -78,3 +78,46 @@ def preview_with_models(body):
         rows.append({'title': c.text, 'fields': fields, 'warnings': warnings})
     return {'candidates': rows, 'mode': 'models', 'model': os.getenv('DLEDGER_MODEL_NANO'),
             'usage': {key: value - before[key] for key, value in USAGE['nano'].items()}}
+
+
+def documents(body):
+    """Normalize a bounded batch while retaining each file's source attribution."""
+    if 'documents' not in body:
+        preview(body)
+        return [body]
+    items = body['documents']
+    if not isinstance(items, list) or not 1 <= len(items) <= 20:
+        raise ValueError('choose between 1 and 20 Markdown files')
+    result, total = [], 0
+    for item in items:
+        if not isinstance(item, dict):
+            raise ValueError('each document must contain text and a source filename')
+        row = {'text': item.get('text'), 'source': item.get('source'), 'owner': body.get('owner', '')}
+        preview(row)
+        total += len(row['text'])
+        if total > 100_000:
+            raise ValueError('combined documents must not exceed 100,000 characters')
+        result.append(row)
+    return result
+
+
+def preview_documents(body):
+    """Validate the entire batch before any optional model requests."""
+    docs = documents(body)
+    # Bound the aggregate number of candidates for an atomic import.
+    if sum(len(preview(doc)) for doc in docs) > 20:
+        raise ValueError('preview at most 20 decisions across all files')
+    rows, usage, model = [], {}, None
+    for doc in docs:
+        if body.get('use_llm', False):
+            result = preview_with_models(doc)
+            rows.extend(result['candidates'])
+            model = result['model']
+            for key, value in result['usage'].items():
+                usage[key] = usage.get(key, 0) + value
+        else:
+            rows.extend(preview(doc))
+    if len(rows) > 20:
+        raise ValueError('model returned more than 20 decisions; select fewer files')
+    return {'candidates': rows, 'mode': 'models' if body.get('use_llm') else 'markdown_rules',
+            'documents': len(docs), 'model': model, 'usage': usage}

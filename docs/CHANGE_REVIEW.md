@@ -52,3 +52,15 @@ or:
 ```
 
 The result contains commit identities (or explicit synthetic labels), changed-file hashes, before/after verdicts and redacted evidence, affected owners and dependency paths, category counts and actual model usage/fallback. It does not return raw file content. It is not stored in the normal verification timeline; download the export to retain it.
+
+## Review brief
+
+Comparisons now open with a brief listing changed files, challenged decisions, owners and cited evidence. Direct contradicted/stale findings are separated from uncertain or dependent concerns. Each item links to its full before/after evidence and dependency paths. Detailed categories stay collapsed until requested; JSON exports include the same grounded `brief` object. The brief uses existing assessments and makes no extra model calls.
+
+## Bring existing ADRs
+
+Select **Import ADRs → Choose existing ADR files** to load up to 20 `.md`, `.markdown` or `.txt` files (100 KB combined). Alternatively paste Markdown. Preview keeps each filename and line reference, extracts choices and owners, and lets you edit or deselect candidates before saving. Accepted ADRs and MADR Decision Outcome / Context and Problem Statement sections are supported by the rules parser. Unknown or ambiguous choices require manual completion or opt-in Nemotron extraction. Missing owners are never invented; supply a default or edit each candidate. Relationships are not automatically inferred by file import.
+
+The preview is read-only. Saving is explicit, duplicate-safe and atomic; newly saved decisions remain unchecked. Use **Check imported decisions** afterward. Try the two files in `data/adr-demo/` to exercise the flow.
+
+Batch preview API: `POST /api/import/preview` with `{"documents":[{"source":"0001-cache.md","text":"..."}],"owner":"Default reviewer","use_llm":false}`. At most 20 candidate decisions can be saved in one batch.

@@ -240,3 +240,7 @@ In **Import ADRs**, opt into **Use Nemotron extraction through Nebius** to previ
 ## Review a proposed change
 
 Select **Review this change** and compare local Git commits or branches, or use `WORKTREE` for current working files. The report separates new, existing, resolved and unchanged findings, with before/after evidence, affected owners and dependency paths. **Try the migration example** works without Git using a packaged synthetic fixture. Comparisons are read-only; model calls are optional and disclosed. See [change-review behavior and limits](docs/CHANGE_REVIEW.md).
+
+### Faster onboarding and review briefs
+
+Import existing Markdown ADR files in a batch, review extracted choices and owners, and save only approved candidates. Every source filename and line is retained. Change comparisons now lead with a concise evidence-backed brief and affected owners; full before/after findings are available on demand. See [the workflow guide](docs/CHANGE_REVIEW.md).
